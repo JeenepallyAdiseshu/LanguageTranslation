@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Analytics System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<button class="toggle-btn" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+
+<div class="card">
+    <h1>🌍 Text Analytics & Translation</h1>
+
+    <form method="POST">
+        <textarea id="textInput" name="text" placeholder="Enter text here..." required>{{ text }}</textarea>
+
+        <button type="button" onclick="startVoice()">🎤 Voice Input</button>
+
+        <select name="target_lang">
+            {% for name, code in languages.items() %}
+                <option value="{{ name }}">{{ name.title() }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Analyze & Translate</button>
+    </form>
+
+    {% if detected_lang %}
+    <div class="result">
+        <p><strong>Detected Language:</strong> {{ detected_lang }}</p>
+        <p><strong>Word Count:</strong> {{ word_count }}</p>
+        <p><strong>Character Count:</strong> {{ char_count }}</p>
+        <p><strong>Sentiment:</strong> {{ sentiment }} ({{ polarity }})</p>
+
+        <h3>Translated Text:</h3>
+        <div class="output">
+            {{ translated_text }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+}
+
+function startVoice() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        document.getElementById("textInput").value = event.results[0][0].transcript;
+    };
+}
+</script>
+
+</body>
+</html>
