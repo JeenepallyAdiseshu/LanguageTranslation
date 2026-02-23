@@ -1,5 +1,7 @@
-flask
-gunicorn
+streamlit
 langdetect
 deep-translator
 textblob
+PyPDF2
+python-docx
+fpdf2
